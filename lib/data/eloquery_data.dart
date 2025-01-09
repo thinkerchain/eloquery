@@ -10,7 +10,7 @@ class EloqueryData<T> {
   bool enabled;
 
   EloqueryData({
-    this.staleTimeMilis = 1000 * 60 * 5,
+    this.staleTimeMilis = 1000 * 10,
     this.enabled = true,
   }) : lastDataGatheringEpoch = DateTime.now().millisecondsSinceEpoch;
 }
