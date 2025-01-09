@@ -12,11 +12,6 @@ class EloqueryClientCubit extends Cubit<EloqueryClientState> {
   EloqueryData? getExistingData(List<String> queryKey) {
     final existingData = _data
         .firstWhereOrNull((element) => listEquals(element.queryKey, queryKey));
-    final existingDataFresh =
-        existingData?.eloqueryData.dataState == DataState.dataFresh;
-    if (!existingDataFresh) {
-      return null;
-    }
     return existingData?.eloqueryData;
   }
 
@@ -25,15 +20,9 @@ class EloqueryClientCubit extends Cubit<EloqueryClientState> {
   }
 
   void addData(({List<String> queryKey, EloqueryData eloqueryData}) data) {
-    final existingData = _data.firstWhereOrNull(
-        (element) => listEquals(element.queryKey, data.queryKey));
-
-    // make old data stale
-    existingData?.eloqueryData.dataState = DataState.dataStale;
-
+    _data.removeWhere((element) => listEquals(element.queryKey, data.queryKey));
     // add new fresh data
     _data.add(data);
-
     emit(EloqueryClientReady(_data));
   }
 }

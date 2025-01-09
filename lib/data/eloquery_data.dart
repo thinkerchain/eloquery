@@ -1,5 +1,3 @@
-enum DataState { dataFresh, dataStale }
-
 class EloqueryData<T> {
   // DATA
   T? data;
@@ -7,8 +5,6 @@ class EloqueryData<T> {
   // STALE TIME
   int lastDataGatheringEpoch = 0;
   late int staleTimeMilis;
-
-  DataState dataState = DataState.dataFresh;
 
   // QUERY OPTION
   bool enabled;
