@@ -3,7 +3,7 @@ class EloqueryData<T> {
   T? data;
 
   // STALE TIME
-  int lastDataGatheringEpoch = 0;
+  late int lastDataGatheringEpoch;
   late int staleTimeMilis;
 
   // QUERY OPTION
@@ -12,5 +12,5 @@ class EloqueryData<T> {
   EloqueryData({
     this.staleTimeMilis = 1000 * 60 * 5,
     this.enabled = true,
-  });
+  }) : lastDataGatheringEpoch = DateTime.now().millisecondsSinceEpoch;
 }
