@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:thinkerchain_stack_eloquery/cubit/eloquery_client_cubit.dart';
 import 'package:thinkerchain_stack_eloquery/cubit/eloquery_cubit.dart';
-import 'package:thinkerchain_stack_eloquery/data/eloquery_data.dart';
+import 'package:thinkerchain_stack_eloquery/data/eloquery_response.dart';
 
 class EloqueryBuilder<T> extends StatefulWidget {
   EloqueryBuilder({
@@ -12,11 +12,11 @@ class EloqueryBuilder<T> extends StatefulWidget {
     required this.queryKey,
     required this.queryFn,
     required this.builder,
-    EloqueryData? eloqueryData,
-  }) : eloqueryData = eloqueryData ?? EloqueryData();
+    EloqueryResponse? eloqueryData,
+  }) : eloqueryData = eloqueryData ?? EloqueryResponse();
 
   // QUERY DATA
-  final EloqueryData eloqueryData;
+  final EloqueryResponse eloqueryData;
   // QUERY STALE TIME
   final List<String> queryKey;
   final FutureOr<T> Function() queryFn;
@@ -35,7 +35,7 @@ class _EloqueryBuilderState<T> extends State<EloqueryBuilder<T>> {
         create: (context) {
           final queryClientData = context
               .read<EloqueryClientCubit>()
-              .getExistingData(widget.queryKey) as EloqueryData<T>?;
+              .getExistingData(widget.queryKey) as EloqueryResponse<T>?;
           return QueryCubitImpl<T>(
               eloqueryData: queryClientData,
               queryKey: widget.queryKey,

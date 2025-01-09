@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:thinkerchain_stack_eloquery/data/eloquery_data.dart';
+import 'package:thinkerchain_stack_eloquery/data/eloquery_response.dart';
 
 part 'eloquery_state.dart';
 
@@ -18,7 +18,7 @@ class QueryCubitImpl<T> extends Cubit<EloqueryState<T>> {
   List<String> queryKey;
   FutureOr<T> Function() queryFn;
 
-  late EloqueryData<T> eloqueryData;
+  late EloqueryResponse<T> eloqueryData;
 
   // BUILDER
   Widget Function(BuildContext, EloqueryState<T>, Function refetch) builder;
@@ -27,15 +27,15 @@ class QueryCubitImpl<T> extends Cubit<EloqueryState<T>> {
     required this.queryKey,
     required this.queryFn,
     required this.builder,
-    EloqueryData<T>? eloqueryData,
+    EloqueryResponse<T>? eloqueryData,
   }) : super(EloqueryInitial()) {
-    this.eloqueryData = eloqueryData ?? EloqueryData<T>();
+    this.eloqueryData = eloqueryData ?? EloqueryResponse<T>();
   }
 
   void runQueryFun() async {
     try {
       emit(EloqueryFetching());
-      if (eloqueryData.data != null) {
+      if (eloqueryData.data != null && !eloqueryData.isStale) {
         emit(EloquerySuccess(eloqueryData));
         return;
       }
