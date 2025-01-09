@@ -12,11 +12,11 @@ class EloqueryBuilder<T> extends StatefulWidget {
     required this.queryKey,
     required this.queryFn,
     required this.builder,
-    EloqueryResponse? eloqueryData,
-  }) : eloqueryData = eloqueryData ?? EloqueryResponse();
+    EloqueryResponse? eloqueryResponse,
+  }) : eloqueryResponse = eloqueryResponse ?? EloqueryResponse();
 
   // QUERY DATA
-  final EloqueryResponse eloqueryData;
+  final EloqueryResponse eloqueryResponse;
   // QUERY STALE TIME
   final List<String> queryKey;
   final FutureOr<T> Function() queryFn;
@@ -37,7 +37,7 @@ class _EloqueryBuilderState<T> extends State<EloqueryBuilder<T>> {
               .read<EloqueryClientCubit>()
               .getExistingData(widget.queryKey) as EloqueryResponse<T>?;
           return QueryCubitImpl<T>(
-              eloqueryData: queryClientData,
+              eloqueryResponse: queryClientData,
               queryKey: widget.queryKey,
               queryFn: widget.queryFn,
               builder: widget.builder);
@@ -83,7 +83,7 @@ class _RenderWidgetState<T> extends State<RenderWidget<T>> {
               if (state is EloquerySuccess<T>) {
                 context.read<EloqueryClientCubit>().addData((
                   queryKey: widget.widget.queryKey,
-                  eloqueryData: state.data,
+                  eloqueryResponse: state.data,
                 ));
               }
             }, builder: (context, state) {

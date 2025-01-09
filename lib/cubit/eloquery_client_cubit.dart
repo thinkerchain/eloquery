@@ -6,21 +6,22 @@ import 'package:thinkerchain_stack_eloquery/data/eloquery_response.dart';
 part 'eloquery_client_state.dart';
 
 class EloqueryClientCubit extends Cubit<EloqueryClientState> {
-  final List<({List<String> queryKey, EloqueryResponse eloqueryData})> _data =
-      [];
+  final List<({List<String> queryKey, EloqueryResponse eloqueryResponse})>
+      _data = [];
   EloqueryClientCubit() : super(EloqueryClientInitial());
 
   EloqueryResponse? getExistingData(List<String> queryKey) {
     final existingData = _data
         .firstWhereOrNull((element) => listEquals(element.queryKey, queryKey));
-    return existingData?.eloqueryData;
+    return existingData?.eloqueryResponse;
   }
 
   void init() {
     emit(EloqueryClientReady(_data));
   }
 
-  void addData(({List<String> queryKey, EloqueryResponse eloqueryData}) data) {
+  void addData(
+      ({List<String> queryKey, EloqueryResponse eloqueryResponse}) data) {
     _data.removeWhere((element) => listEquals(element.queryKey, data.queryKey));
     _data.add(data);
   }

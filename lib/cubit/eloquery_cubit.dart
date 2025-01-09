@@ -18,7 +18,7 @@ class QueryCubitImpl<T> extends Cubit<EloqueryState<T>> {
   List<String> queryKey;
   FutureOr<T> Function() queryFn;
 
-  late EloqueryResponse<T> eloqueryData;
+  late EloqueryResponse<T> eloqueryResponse;
 
   // BUILDER
   Widget Function(BuildContext, EloqueryState<T>, Function refetch) builder;
@@ -27,23 +27,23 @@ class QueryCubitImpl<T> extends Cubit<EloqueryState<T>> {
     required this.queryKey,
     required this.queryFn,
     required this.builder,
-    EloqueryResponse<T>? eloqueryData,
+    EloqueryResponse<T>? eloqueryResponse,
   }) : super(EloqueryInitial()) {
-    this.eloqueryData = eloqueryData ?? EloqueryResponse<T>();
+    this.eloqueryResponse = eloqueryResponse ?? EloqueryResponse<T>();
   }
 
   void runQueryFun() async {
     try {
       emit(EloqueryFetching());
-      if (eloqueryData.data != null && !eloqueryData.isStale) {
-        emit(EloquerySuccess(eloqueryData));
+      if (eloqueryResponse.data != null && !eloqueryResponse.isStale) {
+        emit(EloquerySuccess(eloqueryResponse));
         return;
       }
       final result = await queryFn();
-      eloqueryData.data = result;
-      eloqueryData.lastDataGatheringEpoch =
+      eloqueryResponse.data = result;
+      eloqueryResponse.lastDataGatheringEpoch =
           DateTime.now().millisecondsSinceEpoch;
-      emit(EloquerySuccess<T>(eloqueryData));
+      emit(EloquerySuccess<T>(eloqueryResponse));
     } catch (e) {
       emit(EloqueryError());
     }
@@ -51,9 +51,9 @@ class QueryCubitImpl<T> extends Cubit<EloqueryState<T>> {
 
   bool checkDataStale() {
     final epoch = DateTime.now().millisecondsSinceEpoch;
-    final isStale =
-        eloqueryData.lastDataGatheringEpoch + eloqueryData.staleTimeMilis <
-            epoch;
+    final isStale = eloqueryResponse.lastDataGatheringEpoch +
+            eloqueryResponse.staleTimeMilis <
+        epoch;
     return isStale;
   }
 }
