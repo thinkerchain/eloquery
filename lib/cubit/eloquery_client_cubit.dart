@@ -12,7 +12,15 @@ class EloqueryClientCubit extends Cubit<EloqueryClientState> {
   EloqueryData? getExistingData(List<String> queryKey) {
     final existingData = _data
         .firstWhereOrNull((element) => listEquals(element.queryKey, queryKey));
-    return existingData?.eloqueryData;
+    if (existingData != null) {
+      final currentEpoch = DateTime.now().millisecondsSinceEpoch;
+      if (existingData.eloqueryData.lastDataGatheringEpoch +
+              existingData.eloqueryData.staleTimeMilis <
+          currentEpoch) {
+        return existingData.eloqueryData;
+      }
+    }
+    return null;
   }
 
   void init() {
