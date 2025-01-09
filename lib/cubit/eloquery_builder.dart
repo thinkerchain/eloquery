@@ -35,16 +35,9 @@ class _EloqueryBuilderState<T> extends State<EloqueryBuilder<T>> {
         create: (context) {
           final queryClientData = context
               .read<EloqueryClientCubit>()
-              .getExistingData(widget.queryKey);
-          if (queryClientData != null) {
-            return QueryCubitImpl<T>(
-                eloqueryData: queryClientData.data,
-                queryKey: widget.queryKey,
-                queryFn: widget.queryFn,
-                builder: widget.builder);
-          }
+              .getExistingData(widget.queryKey) as EloqueryData<T>?;
           return QueryCubitImpl<T>(
-              eloqueryData: widget.eloqueryData.data,
+              eloqueryData: queryClientData,
               queryKey: widget.queryKey,
               queryFn: widget.queryFn,
               builder: widget.builder);
