@@ -21,7 +21,6 @@ class EloqueryClientCubit extends Cubit<EloqueryClientState> {
 
   void addData(({List<String> queryKey, EloqueryData eloqueryData}) data) {
     _data.removeWhere((element) => listEquals(element.queryKey, data.queryKey));
-    // add new fresh data
     _data.add(data);
     emit(EloqueryClientReady(_data));
   }

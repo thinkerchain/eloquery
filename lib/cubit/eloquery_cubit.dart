@@ -35,8 +35,7 @@ class QueryCubitImpl<T> extends Cubit<EloqueryState<T>> {
   void runQueryFun() async {
     try {
       emit(EloqueryFetching());
-      final isStale = checkDataStale();
-      if (!isStale && eloqueryData.data != null) {
+      if (eloqueryData.data != null) {
         emit(EloquerySuccess(eloqueryData.data));
         return;
       }
