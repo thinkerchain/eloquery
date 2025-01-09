@@ -6,7 +6,7 @@ sealed class EloqueryState<T> {}
 final class EloqueryInitial<T> extends EloqueryState<T> {}
 
 final class EloquerySuccess<T> extends EloqueryState<T> {
-  final T? data;
+  final EloqueryData<T> data;
   EloquerySuccess(this.data);
 }
 

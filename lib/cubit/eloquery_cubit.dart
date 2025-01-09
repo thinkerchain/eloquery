@@ -18,7 +18,7 @@ class QueryCubitImpl<T> extends Cubit<EloqueryState<T>> {
   List<String> queryKey;
   FutureOr<T> Function() queryFn;
 
-  late EloqueryData eloqueryData;
+  late EloqueryData<T> eloqueryData;
 
   // BUILDER
   Widget Function(BuildContext, EloqueryState<T>, Function refetch) builder;
@@ -27,23 +27,23 @@ class QueryCubitImpl<T> extends Cubit<EloqueryState<T>> {
     required this.queryKey,
     required this.queryFn,
     required this.builder,
-    EloqueryData? eloqueryData,
+    EloqueryData<T>? eloqueryData,
   }) : super(EloqueryInitial()) {
-    this.eloqueryData = eloqueryData ?? EloqueryData();
+    this.eloqueryData = eloqueryData ?? EloqueryData<T>();
   }
 
   void runQueryFun() async {
     try {
       emit(EloqueryFetching());
       if (eloqueryData.data != null) {
-        emit(EloquerySuccess(eloqueryData.data));
+        emit(EloquerySuccess(eloqueryData));
         return;
       }
       final result = await queryFn();
       eloqueryData.data = result;
       eloqueryData.lastDataGatheringEpoch =
           DateTime.now().millisecondsSinceEpoch;
-      emit(EloquerySuccess<T>(result));
+      emit(EloquerySuccess<T>(eloqueryData));
     } catch (e) {
       emit(EloqueryError());
     }
